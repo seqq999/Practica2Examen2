@@ -13,14 +13,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.net.URI;
 import java.time.Instant;
 
-/**
- * Manejador global de excepciones. Todas las respuestas de error siguen el
- * contrato RFC 7807 (application/problem+json) mediante ProblemDetail de Spring 6.
- */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // 403 - Intento de acceso a un recurso ajeno (IDOR / BOLA)
     @ExceptionHandler(AccesoDenegadoException.class)
     public ResponseEntity<ProblemDetail> manejarAccesoDenegado(AccesoDenegadoException ex) {
         return construir(HttpStatus.FORBIDDEN,
@@ -29,7 +24,6 @@ public class GlobalExceptionHandler {
                 "https://insecurepay.cr/errors/403");
     }
 
-    // 404 - Recurso inexistente
     @ExceptionHandler(RecursoNoEncontradoException.class)
     public ResponseEntity<ProblemDetail> manejarNoEncontrado(RecursoNoEncontradoException ex) {
         return construir(HttpStatus.NOT_FOUND,
@@ -38,7 +32,6 @@ public class GlobalExceptionHandler {
                 "https://insecurepay.cr/errors/404");
     }
 
-    // 401 - Token ausente, mal formado, con firma invalida o expirado
     @ExceptionHandler({TokenInvalidoException.class, MissingRequestHeaderException.class})
     public ResponseEntity<ProblemDetail> manejarNoAutenticado(Exception ex) {
         return construir(HttpStatus.UNAUTHORIZED,

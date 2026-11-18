@@ -44,13 +44,10 @@ public class JwtUtil {
                 .getPayload();
     }
 
-    // Extrae el username (claim "sub") de un token con firma valida.
-    // Lanza JwtException si la firma es invalida o el token expiro.
     public String extraerUsername(String token) {
         return getClaims(token).getSubject();
     }
 
-    // Extrae el rol (claim "rol") de un token con firma valida.
     public String extraerRol(String token) {
         return getClaims(token).get("rol", String.class);
     }

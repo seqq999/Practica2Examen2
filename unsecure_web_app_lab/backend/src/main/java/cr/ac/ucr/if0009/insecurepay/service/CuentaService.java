@@ -37,16 +37,10 @@ public class CuentaService {
                 .collect(Collectors.toList());
     }
 
-    // ==========================================================================
-    // [MITIGACION A01:2021 - IDOR / BOLA] Validacion estricta de propiedad
-    // (Resource Ownership) a partir de la identidad contenida en el JWT.
-    // ==========================================================================
     @Transactional(readOnly = true)
     public CuentaDto obtenerCuentaSegura(Long cuentaId, String authHeader) {
-        // 1. Extraer el token de "Authorization: Bearer <token>"
         String token = extraerBearerToken(authHeader);
 
-        // 2. Extraer identidad del emisor (la firma se verifica al parsear)
         Claims claims;
         try {
             claims = jwtUtil.getClaims(token);
@@ -56,16 +50,13 @@ public class CuentaService {
         String usernameAutenticado = claims.getSubject();
         String rolAutenticado = claims.get("rol", String.class);
 
-        // 3. Buscar la cuenta (404 si no existe)
         CuentaBancaria cuenta = cuentaRepository.findById(cuentaId)
                 .orElseThrow(() -> new RecursoNoEncontradoException(
                         "La cuenta solicitada no existe."));
 
-        // 4. Validar propiedad: duenio exacto o rol ADMIN
         boolean esDuenio = cuenta.getUsuario().getUsername().equals(usernameAutenticado);
         boolean esAdmin = Rol.ADMIN.name().equals(rolAutenticado);
 
-        // 5. Si no es duenio ni ADMIN -> 403 sin revelar datos del recurso ajeno
         if (!esDuenio && !esAdmin) {
             throw new AccesoDenegadoException(
                     "No tiene permisos para consultar el recurso solicitado. "

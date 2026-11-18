@@ -1,20 +1,16 @@
-# Dependencias y builds (sin "/" final para cubrir también symlinks/junctions)
 node_modules
 dist
 .angular
 target
 
-# Compilados y empaquetados
 *.class
 *.jar
 *.war
 
-# Logs y BD local
 *.log
 *.mv.db
 *.trace.db
 
-# IDE / SO
 .idea/
 *.iml
 .DS_Store

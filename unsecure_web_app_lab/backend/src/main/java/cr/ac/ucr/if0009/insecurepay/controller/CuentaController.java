@@ -26,7 +26,6 @@ public class CuentaController {
         return ResponseEntity.ok(cuentaService.listarTodas());
     }
 
-    // [MITIGADO: A01:2021 - IDOR] Requiere JWT y valida propiedad de la cuenta
     @GetMapping("/{id}")
     public ResponseEntity<CuentaDto> obtenerPorId(
             @PathVariable Long id,
@@ -34,7 +33,6 @@ public class CuentaController {
         return ResponseEntity.ok(cuentaService.obtenerCuentaSegura(id, authHeader));
     }
 
-    // [MITIGADO: A01:2021 - IDOR] Consulta de saldo con validacion de propiedad
     @GetMapping("/{id}/saldo")
     public ResponseEntity<Map<String, Object>> obtenerSaldo(
             @PathVariable Long id,
