@@ -1,0 +1,76 @@
+### Paso 1: carlos_mora -> GET /api/cuentas/3/saldo (cuenta de maria_rojas)
+HTTP/1.1 403 
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/problem+json
+Transfer-Encoding: chunked
+Date: Wed, 18 Nov 2026 20:10:25 GMT
+
+{"type":"https://insecurepay.cr/errors/403","title":"Acceso no autorizado a recurso ajeno","status":403,"detail":"No tiene permisos para consultar el recurso solicitado. El intento ha sido registrado.","instance":"/api/cuentas/3/saldo","timestamp":"2026-11-18T20:10:26.739888800Z"}
+
+### Paso 2: carlos_mora -> GET /api/cuentas/2/saldo (cuenta propia de carlos_mora)
+HTTP/1.1 200 
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: Wed, 18 Nov 2026 20:10:25 GMT
+
+{"cuentaId":2,"numeroCuenta":"CR05015202001026458901","titular":"Carlos Mora Morales","saldo":250000.00,"moneda":"CRC"}
+
+### Extra: carlos_mora -> GET /api/cuentas/1/saldo (cuenta del admin; el PDF la llama de Carlos)
+HTTP/1.1 403 
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/problem+json
+Transfer-Encoding: chunked
+Date: Wed, 18 Nov 2026 20:10:26 GMT
+
+{"type":"https://insecurepay.cr/errors/403","title":"Acceso no autorizado a recurso ajeno","status":403,"detail":"No tiene permisos para consultar el recurso solicitado. El intento ha sido registrado.","instance":"/api/cuentas/1/saldo","timestamp":"2026-11-18T20:10:26.962653100Z"}
+
+### Extra: admin -> GET /api/cuentas/3/saldo
+HTTP/1.1 200 
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: Wed, 18 Nov 2026 20:10:26 GMT
+
+{"cuentaId":3,"numeroCuenta":"CR05015202001026458902","titular":"María Rojas Soto","saldo":4850000.00,"moneda":"CRC"}
+
+### Extra: carlos_mora -> GET /api/cuentas/99
+HTTP/1.1 404 
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/problem+json
+Transfer-Encoding: chunked
+Date: Wed, 18 Nov 2026 20:10:26 GMT
+
+{"type":"https://insecurepay.cr/errors/404","title":"Recurso no encontrado","status":404,"detail":"La cuenta solicitada no existe.","instance":"/api/cuentas/99","timestamp":"2026-11-18T20:10:27.153758400Z"}
+
+### Extra: sin cabecera Authorization -> GET /api/cuentas/2/saldo
+HTTP/1.1 401 
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/problem+json
+Transfer-Encoding: chunked
+Date: Wed, 18 Nov 2026 20:10:26 GMT
+
+{"type":"https://insecurepay.cr/errors/401","title":"Autenticacion requerida","status":401,"detail":"Token de autorizacion ausente, invalido o expirado.","instance":"/api/cuentas/2/saldo","timestamp":"2026-11-18T20:10:27.245598700Z"}
+
+### Extra: token adulterado -> GET /api/cuentas/2/saldo
+HTTP/1.1 401 
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/problem+json
+Transfer-Encoding: chunked
+Date: Wed, 18 Nov 2026 20:10:26 GMT
+
+{"type":"https://insecurepay.cr/errors/401","title":"Autenticacion requerida","status":401,"detail":"Token de autorizacion ausente, invalido o expirado.","instance":"/api/cuentas/2/saldo","timestamp":"2026-11-18T20:10:27.338783900Z"}
